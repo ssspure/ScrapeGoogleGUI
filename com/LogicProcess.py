@@ -260,7 +260,7 @@ def parse_results(html, keyword, google_url, baseRating):
                 rating = pattern.findall(rating)[0]
                 if float(rating) > baseRating:
                     if link != '#':
-                        found_results.append({"google_url":google_url, 'keyword': keyword,
+                        found_results.append({"google_url": google_url, 'keyword': keyword,
                                               'link': link, 'rating': rating, 'title': title})
     return found_results, nextPage
 
@@ -272,7 +272,7 @@ def fetch_results(search_term, number_results, start, rating, googleUrl, amazonU
     escaped_search_term = search_term.replace(' ', '+')
 
     google_url = '{}/search?q=site:{}+{}+currently+unavailable&num={}&start={}'\
-        .format(googleUrl, amazonUrl, escaped_search_term, number_results,start)
+        .format(googleUrl, amazonUrl, escaped_search_term, number_results, start)
     response = requests.get(google_url,headers=USER_AGENT)
     response.raise_for_status()
 
@@ -320,7 +320,23 @@ def setUIInitialValue(ui):
     :return:None
     """
 
-    db = ManageDB()
+    dbFile = os.path.join(ui.path, "system.db")
+
+    db = ManageDB(dbFile)
+
+    if not os.path.exists(dbFile):
+        # 数据库文件不存在的时候，创建数据库文件
+        datas = {}
+
+        # 创建初始化数据
+        datas["products"] = "towel,dog"
+        datas["rating"] = "4.3"
+        datas["googleUrl"] = "https://www.google.com"
+        datas["amazonUrl"] = "amazon.com"
+        datas["interval"] = "20"
+        datas["resultFilePath"] = r"C:\coding"
+        db.createTable()
+        db.insertToInfo(datas)
 
     datas = db.selectFromInfo()
 

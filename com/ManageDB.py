@@ -3,8 +3,8 @@ import os
 
 
 class ManageDB():
-    def __init__(self, dbFile="system.db"):
-        dbFile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), dbFile)
+    def __init__(self, dbFile):
+        # dbFile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), dbFile)
         self.database = sqlite3.connect(dbFile)
         self.conn = self.database.cursor()
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         datas["rating"] = "4.3"
         datas["googleUrl"] = "https://www.google.com.tw"
         datas["amazonUrl"] = "amazon.com"
-        datas["interval"] = "60"
+        datas["interval"] = "20"
         datas["resultFilePath"] = "/Users/ssspure/result"
 
         return datas

@@ -32,6 +32,8 @@ class MainProcess(QWidget, Ui_ScrapeGoogle):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        # 获取当前程序所在的路径
+        self.path = os.path.dirname(os.path.abspath(__file__))
 
         # 设置界面初始值
         setUIInitialValue(self)
