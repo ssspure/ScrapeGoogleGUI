@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from com.MainUI import *
 from com.LogicProcess import *
 from PyQt5.QtCore import QThread,pyqtSignal
+import sys
 
 
 class RunThread(QThread):

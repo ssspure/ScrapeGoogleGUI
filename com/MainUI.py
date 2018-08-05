@@ -186,17 +186,21 @@ class Ui_ScrapeGoogle(object):
         self.productLbl.setText(_translate("ScrapeGoogle", "产品名称:"))
         self.productText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
         self.rateLbl.setText(_translate("ScrapeGoogle", "评         分:"))
-        self.rateText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
+        self.rateText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>评分只能输入数字</p></body></html>"))
         self.googleURLLbl.setText(_translate("ScrapeGoogle", "谷歌地址:"))
-        self.googleURLText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
         self.amazonURLLbl.setText(_translate("ScrapeGoogle", "亚马逊地址:"))
-        self.amazonURLText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
         self.intervalLbl.setText(_translate("ScrapeGoogle", "间隔时间:"))
-        self.intervalText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
+        self.intervalText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>建议将间隔时间设置到20秒以上</p></body></html>"))
         self.resultLbl.setText(_translate("ScrapeGoogle", "结果路径:"))
-        self.resultText.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>请输入产品名称,多个产品之间使用逗号隔开</p></body></html>"))
+        self.stateText.setToolTip(
+            _translate("ScrapeGoogle", "<html><head/><body><p>这里是用来显示程序运行状态的，您不需要再这里输入任何东西</p></body></html>"))
         self.runStateLbl.setText(_translate("ScrapeGoogle", "执行状态:"))
+        self.saveDataBtn.setToolTip(
+            _translate("ScrapeGoogle", "<html><head/><body><p>您可以保存此次运行的数据，以便下次启动的时候可以直接使用</p></body></html>"))
         self.saveDataBtn.setText(_translate("ScrapeGoogle", "保存数据"))
         self.openResultFileBtn.setText(_translate("ScrapeGoogle", "打开结果文件"))
+        self.openResultFileBtn.setToolTip(
+            _translate("ScrapeGoogle", "<html><head/><body><p>打开结果文件所在的文件夹</p></body></html>"))
+        self.runBtn.setToolTip(_translate("ScrapeGoogle", "<html><head/><body><p>运行程序</p></body></html>"))
         self.runBtn.setText(_translate("ScrapeGoogle", "执行程序"))
 
