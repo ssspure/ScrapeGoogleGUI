@@ -36,8 +36,6 @@ class RunThread(QThread):
                 sendMail(msg)
                 QMessageBox.about(self.ui, '提示', '邮件已经发送完毕，请等待开发人员处理!!!')
 
-        QApplication.processEvents()
-
 
 class MainProcess(QWidget, Ui_ScrapeGoogle):
     def __init__(self):
@@ -74,7 +72,7 @@ class MainProcess(QWidget, Ui_ScrapeGoogle):
     def stateMessage(self, msg):
         # 将回调数据输出到文本框
         self.stateText.append(msg)
-        QApplication.processEvents()
+        # QApplication.processEvents()
 
 
 

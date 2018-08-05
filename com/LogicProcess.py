@@ -8,6 +8,7 @@ import datetime
 import xlsxwriter
 from com.ManageDB import ManageDB
 import smtplib
+from com.BaseException import BaseException
 
 
 def initialProcess(ui):
@@ -174,6 +175,7 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
             while True:
                 thread._singal.emit("开始获取{}产品第{}页数据!!!".format(product, str(i+1)))
                 results, nextPage = scrape_google(thread, product, 100, i*100, rating, googleUrl, amazonUrl)
+
                 for result in results:
                     datas.append(result)
 
@@ -188,6 +190,8 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
 
             dic[product] = datas
 
+        except BaseException as e:
+            return
         except Exception as e:
             thread._singal.emit(str(e))
             thread.scrapeEndPrompt.emit(str(e))
@@ -285,17 +289,21 @@ def fetch_results(search_term, number_results, start, rating, googleUrl, amazonU
 
 def scrape_google(thread, search_term, number_results, start, rating, googleUrl, amazonUrl):
     try:
+        results = []
+        nextPage = None
         keyword, html, google_url = fetch_results(search_term, number_results, start, rating, googleUrl, amazonUrl)
         results, nextPage = parse_results(html, keyword, google_url, float(rating))
         return results, nextPage
     except AssertionError:
         raise Exception("Incorrect arguments parsed to function")
     except requests.HTTPError:
+        thread._singal.emit("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!")
         thread.scrapeEndPrompt.emit("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!$True")
-        return
+        raise BaseException("")
     except requests.RequestException:
+        thread._singal.emit("您的网络连接出现问题,请检查您的网络!!!")
         thread.scrapeEndPrompt.emit("您的网络连接出现问题,请检查您的网络!!!$True")
-        return
+        raise BaseException("")
 
 
 
