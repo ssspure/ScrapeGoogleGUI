@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import QWidget
 from com.MainUI import *
 from com.LogicProcess import *
@@ -17,7 +16,7 @@ class RunThread(QThread):
 
     def run(self):
         runProcess(self, self.ui)
-        QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
+        # QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
 
 
 class MainProcess(QWidget, Ui_ScrapeGoogle):
@@ -49,7 +48,6 @@ class MainProcess(QWidget, Ui_ScrapeGoogle):
             self.thread._singal.connect(self.stateMessage)
             # 开始线程
             self.thread.start()
-
 
     def stateMessage(self, msg):
         # 将回调数据输出到文本框

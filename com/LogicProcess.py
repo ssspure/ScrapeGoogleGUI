@@ -185,26 +185,20 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
                     time.sleep(interval)
                     i = i + 1
 
+            dic[product] = datas
+            thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
+            writeToExcel(dic, resultFilePath)
+            thread._singal.emit("结果文件生成完毕!!!")
+
+            # 获取程序执行结束的时间
+            endtime = datetime.datetime.now()
+            intervalTime = endtime - starttime
+            minute = (intervalTime.seconds) // 60
+            seconds = (intervalTime.seconds) % 60
+            thread._singal.emit("程序共运行{}分{}秒".format(str(minute), str(seconds)))
+
         except Exception as e:
-            print(str(e))
-        finally:
-            time.sleep(interval)
-        dic[product] = datas
-
-    thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
-    writeToExcel(dic, resultFilePath)
-    thread._singal.emit("结果文件生成完毕!!!")
-
-    # 打开文件夹尽在Windows系统下有效
-    # os.system("start explorer " + properties.get("resultFilePath"))
-
-    # 获取程序执行结束的时间
-    endtime = datetime.datetime.now()
-    intervalTime = endtime - starttime
-    minute = (intervalTime.seconds)//60
-    seconds = (intervalTime.seconds)%60
-    thread._singal.emit("程序共运行{}分{}秒".format(str(minute), str(seconds)))
-
+            thread._singal.emit(str(e))
 
 
 def writeToExcel(dic, resultFilePath):
@@ -292,9 +286,9 @@ def scrape_google(search_term, number_results, start, rating, googleUrl, amazonU
     except AssertionError:
         raise Exception("Incorrect arguments parsed to function")
     except requests.HTTPError:
-        raise Exception("You appear to have been blocked by Google")
+        raise Exception("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!")
     except requests.RequestException:
-        raise Exception("Appears to be an issue with your connection")
+        raise Exception("您的网络连接出现问题,请检查您的网络!!!")
 
 
 
