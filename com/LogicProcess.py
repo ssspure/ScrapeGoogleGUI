@@ -185,26 +185,26 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
                     time.sleep(interval)
                     i = i + 1
 
-            dic[product] = datas
-            thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
-            writeToExcel(dic, resultFilePath)
-            thread._singal.emit("结果文件生成完毕!!!")
-
-            # 获取程序执行结束的时间
-            endtime = datetime.datetime.now()
-            intervalTime = endtime - starttime
-            minute = (intervalTime.seconds) // 60
-            seconds = (intervalTime.seconds) % 60
-            thread._singal.emit("程序共运行{}分{}秒".format(str(minute), str(seconds)))
-
         except Exception as e:
             thread._singal.emit(str(e))
             print(e)
 
+    dic[product] = datas
+    thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
+    writeToExcel(dic, resultFilePath)
+    thread._singal.emit("结果文件生成完毕!!!")
+
+    # 获取程序执行结束的时间
+    endtime = datetime.datetime.now()
+    intervalTime = endtime - starttime
+    minute = (intervalTime.seconds) // 60
+    seconds = (intervalTime.seconds) % 60
+    thread._singal.emit("程序共运行{}分{}秒".format(str(minute), str(seconds)))
+
 
 def writeToExcel(dic, resultFilePath):
 
-    nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H%M%秒')
+    nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H%M%S')
 
     contactProName = ""
     for key in dic.keys():
