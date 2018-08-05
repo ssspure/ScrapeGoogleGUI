@@ -203,7 +203,7 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
 
 def writeToExcel(dic, resultFilePath):
 
-    nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H时%M分%S秒')
+    nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H%M%秒')
 
     contactProName = ""
     for key in dic.keys():

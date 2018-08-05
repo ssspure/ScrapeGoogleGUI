@@ -7,24 +7,31 @@ from PyQt5.QtCore import QThread,pyqtSignal
 class RunThread(QThread):
     _singal = pyqtSignal(str)
 
+    scrapeEndPrompt = pyqtSignal()
+
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
+        self.scrapeEndPrompt.connect(self.endPrompt)
 
     def __del__(self):
         self.wait()
 
     def run(self):
         runProcess(self, self.ui)
-        # QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
+        self.scrapeEndPrompt.emit()
+
+
+    def endPrompt(self):
+        QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
+        QApplication.processEvents()
+
 
 
 class MainProcess(QWidget, Ui_ScrapeGoogle):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
-        QMessageBox.about(self, "", os.path.dirname(os.path.abspath(__file__)))
 
         # 设置界面初始值
         setUIInitialValue(self)

@@ -4,7 +4,7 @@ import os
 
 class ManageDB():
     def __init__(self, dbFile="system.db"):
-        dbFile = os.path.join(os.path.dirname(os.path.abspath(__file__)), dbFile)
+        dbFile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), dbFile)
         self.database = sqlite3.connect(dbFile)
         self.conn = self.database.cursor()
 
