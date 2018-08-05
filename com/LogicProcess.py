@@ -190,7 +190,7 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
 
         except Exception as e:
             thread._singal.emit(str(e))
-            # thread.scrapeEndPrompt.emit(str(e))
+            thread.scrapeEndPrompt.emit(str(e))
             return
 
     thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
@@ -291,15 +291,12 @@ def scrape_google(thread, search_term, number_results, start, rating, googleUrl,
     except AssertionError:
         raise Exception("Incorrect arguments parsed to function")
     except requests.HTTPError:
-        thread.scrapeEndPrompt.emit("You appear to have been blocked by Google$True")
+        thread.scrapeEndPrompt.emit("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!$True")
         return
-        # raise Exception("You appear to have been blocked by Google")
-        # raise Exception("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!")
     except requests.RequestException:
-        thread.scrapeEndPrompt.emit("Appears to be an issue with your connection$True")
+        thread.scrapeEndPrompt.emit("您的网络连接出现问题,请检查您的网络!!!$True")
         return
-        # raise Exception("Appears to be an issue with your connection")
-        # raise Exception("您的网络连接出现问题,请检查您的网络!!!")
+
 
 
 

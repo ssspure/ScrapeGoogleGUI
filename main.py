@@ -24,7 +24,7 @@ class RunThread(QThread):
     def endPrompt(self, msg):
         if len(msg.strip()) == 0:
             QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
-        elif msg.strip().find("$True"):
+        elif msg.strip().find("$True") > 0:
             content = msg[0:msg.find("$True")]
             QMessageBox.about(self.ui, '提示', '程序非正常结束!!!\n我们判断此种情况下的问题是您自身能够解决的,\n请根据下面的错误信息做出相对应的处理!!!\n\n'+content)
         else:
