@@ -24,6 +24,8 @@ class MainProcess(QWidget, Ui_ScrapeGoogle):
         super().__init__()
         self.setupUi(self)
 
+        QMessageBox.about(self, "", os.path.dirname(os.path.abspath(__file__)))
+
         # 设置界面初始值
         setUIInitialValue(self)
 
