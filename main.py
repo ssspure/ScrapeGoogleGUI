@@ -7,7 +7,7 @@ from PyQt5.QtCore import QThread,pyqtSignal
 class RunThread(QThread):
     _singal = pyqtSignal(str)
 
-    scrapeEndPrompt = pyqtSignal()
+    scrapeEndPrompt = pyqtSignal(str)
 
     def __init__(self, ui):
         super().__init__()
@@ -19,11 +19,22 @@ class RunThread(QThread):
 
     def run(self):
         runProcess(self, self.ui)
-        self.scrapeEndPrompt.emit()
 
 
-    def endPrompt(self):
-        QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
+    def endPrompt(self, msg):
+        if len(msg.strip()) == 0:
+            QMessageBox.about(self.ui, '提示', '程序运行结束!!!')
+        elif msg.strip().find("$True"):
+            content = msg[0:msg.find("$True")]
+            QMessageBox.about(self.ui, '提示', '程序非正常结束!!!\n我们判断此种情况下的问题是您自身能够解决的,\n请根据下面的错误信息做出相对应的处理!!!\n\n'+content)
+        else:
+            result = QMessageBox.critical(self.ui, '错误', '发现程序出现您无法解决的错误,\n是否将错误信息发送给开发人员解决!!!',
+                                 QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+
+            if result == QMessageBox.Yes:
+                sendMail(msg)
+                QMessageBox.about(self.ui, '提示', '邮件已经发送完毕，请等待开发人员处理!!!')
+
         QApplication.processEvents()
 
 
@@ -63,6 +74,7 @@ class MainProcess(QWidget, Ui_ScrapeGoogle):
         # 将回调数据输出到文本框
         self.stateText.append(msg)
         QApplication.processEvents()
+
 
 
 if __name__ == "__main__":

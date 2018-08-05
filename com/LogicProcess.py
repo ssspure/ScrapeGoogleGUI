@@ -7,6 +7,7 @@ import re
 import datetime
 import xlsxwriter
 from com.ManageDB import ManageDB
+import smtplib
 
 
 def initialProcess(ui):
@@ -172,7 +173,7 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
             i = 0
             while True:
                 thread._singal.emit("开始获取{}产品第{}页数据!!!".format(product, str(i+1)))
-                results, nextPage = scrape_google(product, 100, i*100, rating, googleUrl, amazonUrl)
+                results, nextPage = scrape_google(thread, product, 100, i*100, rating, googleUrl, amazonUrl)
                 for result in results:
                     datas.append(result)
 
@@ -185,14 +186,17 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
                     time.sleep(interval)
                     i = i + 1
 
+            dic[product] = datas
+
         except Exception as e:
             thread._singal.emit(str(e))
-            print(e)
+            # thread.scrapeEndPrompt.emit(str(e))
+            return
 
-    dic[product] = datas
     thread._singal.emit("所有数据获取完毕，开始生成结果文件!!!")
     writeToExcel(dic, resultFilePath)
     thread._singal.emit("结果文件生成完毕!!!")
+    thread.scrapeEndPrompt.emit("")
 
     # 获取程序执行结束的时间
     endtime = datetime.datetime.now()
@@ -279,7 +283,7 @@ def fetch_results(search_term, number_results, start, rating, googleUrl, amazonU
     return search_term, response.text, google_url
 
 
-def scrape_google(search_term, number_results, start, rating, googleUrl, amazonUrl):
+def scrape_google(thread, search_term, number_results, start, rating, googleUrl, amazonUrl):
     try:
         keyword, html, google_url = fetch_results(search_term, number_results, start, rating, googleUrl, amazonUrl)
         results, nextPage = parse_results(html, keyword, google_url, float(rating))
@@ -287,9 +291,15 @@ def scrape_google(search_term, number_results, start, rating, googleUrl, amazonU
     except AssertionError:
         raise Exception("Incorrect arguments parsed to function")
     except requests.HTTPError:
-        raise Exception("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!")
+        thread.scrapeEndPrompt.emit("You appear to have been blocked by Google$True")
+        return
+        # raise Exception("You appear to have been blocked by Google")
+        # raise Exception("您现在已经被谷歌屏蔽,请稍后再尝试运行程序!!!")
     except requests.RequestException:
-        raise Exception("您的网络连接出现问题,请检查您的网络!!!")
+        thread.scrapeEndPrompt.emit("Appears to be an issue with your connection$True")
+        return
+        # raise Exception("Appears to be an issue with your connection")
+        # raise Exception("您的网络连接出现问题,请检查您的网络!!!")
 
 
 
@@ -383,3 +393,25 @@ def saveData(ui):
 def openResultFolder(ui):
     # 打开文件夹尽在Windows系统下有效
     os.system("start explorer " + ui.resultText.text())
+
+
+def sendMail(errMsg):
+    fromaddr = "ssspure@qq.com"
+    toaddrs = "ssspure@gmail.com"
+    subject = "ScrapeGoogleGUI Error Message"
+
+    # Add the From: To: and Subject: headers at the start!
+    msg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n"
+           % (fromaddr, toaddrs, subject))
+
+    msg = msg + "Error Message:\n" + errMsg
+
+    server = smtplib.SMTP_SSL('smtp.qq.com')
+    # 如果是其他的服务，只需要更改 host 为对应地址，port 对对应端口即可
+    # server = smtplib.SMTP_SSL(host='smtp.qq.com', port=465)
+    # server.set_debuglevel(1)    # 开启调试，会打印调试信息#
+    username = "ssspure@qq.com"
+    password = "plmokn321."
+    server.login(username, password)
+    server.sendmail(fromaddr, toaddrs, msg)
+    server.quit()

@@ -11,15 +11,13 @@ class ManageDB():
 
         cursor = self.conn.execute(sql)
 
-        # cursor = self.database.execute(sql)
-
         tblCnt = cursor.fetchall()[0][0]
 
         if tblCnt == 0:
             datas = {}
 
             # 创建初始化数据
-            datas["products"] = "towel,dog"
+            datas["products"] = "towel,pest repeller"
             datas["rating"] = "4.3"
             datas["googleUrl"] = "https://www.google.com"
             datas["amazonUrl"] = "amazon.com"
@@ -68,30 +66,3 @@ class ManageDB():
             datas[data[0]] = data[1]
 
         return datas
-
-
-if __name__ == "__main__":
-
-    def getInfoTableData():
-        datas = {}
-
-        datas["products"] = "towel,dog"
-        datas["rating"] = "4.3"
-        datas["googleUrl"] = "https://www.google.com.tw"
-        datas["amazonUrl"] = "amazon.com"
-        datas["interval"] = "20"
-        datas["resultFilePath"] = "/Users/ssspure/result"
-
-        return datas
-
-    manageDB = ManageDB()
-
-    # manageDB.createTable()
-    manageDB.insertToInfo(getInfoTableData())
-    # datas = manageDB.selectFromInfo()
-
-    # for data in datas:
-    #     print("name:"+data[0] + ",value:"+data[1])
-
-    manageDB.close()
-
