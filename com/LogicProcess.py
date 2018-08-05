@@ -199,6 +199,7 @@ def searchData(thread, productList, rating, googleUrl, amazonUrl, interval, resu
 
         except Exception as e:
             thread._singal.emit(str(e))
+            print(e)
 
 
 def writeToExcel(dic, resultFilePath):
