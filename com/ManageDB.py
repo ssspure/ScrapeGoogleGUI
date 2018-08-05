@@ -4,9 +4,29 @@ import os
 
 class ManageDB():
     def __init__(self, dbFile):
-        # dbFile = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), dbFile)
         self.database = sqlite3.connect(dbFile)
         self.conn = self.database.cursor()
+
+        sql = "select count(*)  from sqlite_master where type='table' and name = 'info';"
+
+        cursor = self.conn.execute(sql)
+
+        # cursor = self.database.execute(sql)
+
+        tblCnt = cursor.fetchall()[0][0]
+
+        if tblCnt == 0:
+            datas = {}
+
+            # 创建初始化数据
+            datas["products"] = "towel,dog"
+            datas["rating"] = "4.3"
+            datas["googleUrl"] = "https://www.google.com"
+            datas["amazonUrl"] = "amazon.com"
+            datas["interval"] = "20"
+            datas["resultFilePath"] = r"C:\coding"
+            self.createTable()
+            self.insertToInfo(datas)
 
     def createTable(self):
         # 创建info表
@@ -17,7 +37,6 @@ class ManageDB():
         );
         '''
         self.conn.execute(sql)
-        self.conn.close()
 
 
     def insertToInfo(self, datas):

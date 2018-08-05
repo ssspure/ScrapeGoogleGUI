@@ -324,20 +324,6 @@ def setUIInitialValue(ui):
 
     db = ManageDB(dbFile)
 
-    if not os.path.exists(dbFile):
-        # 数据库文件不存在的时候，创建数据库文件
-        datas = {}
-
-        # 创建初始化数据
-        datas["products"] = "towel,dog"
-        datas["rating"] = "4.3"
-        datas["googleUrl"] = "https://www.google.com"
-        datas["amazonUrl"] = "amazon.com"
-        datas["interval"] = "20"
-        datas["resultFilePath"] = r"C:\coding"
-        db.createTable()
-        db.insertToInfo(datas)
-
     datas = db.selectFromInfo()
 
     # 设置产品的值
@@ -374,7 +360,9 @@ def saveData(ui):
     # 获取结果文件保存路径的值
     resultFilePath = ui.resultText.text()
 
-    db = ManageDB()
+    dbFile = os.path.join(ui.path, "system.db")
+
+    db = ManageDB(dbFile)
 
     datas = {}
 

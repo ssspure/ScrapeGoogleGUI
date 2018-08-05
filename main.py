@@ -27,7 +27,6 @@ class RunThread(QThread):
         QApplication.processEvents()
 
 
-
 class MainProcess(QWidget, Ui_ScrapeGoogle):
     def __init__(self):
         super().__init__()
